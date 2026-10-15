@@ -1,0 +1,44 @@
+{ # index.html - pagina inicial: buscar + tabela de alunos}
+{% extrends "base.html"%}]
+
+{% block conteudo %}
+<h2>Alunos</h2>
+
+{#formulario de busca com method="get": o texto vai na url (? busca = ana). O app.py le esse valor com request.args.get('busca')#}
+
+<form method="get" class="busca">
+    <input type="text" name="busca" value="{{ busca }}" placeholder="Buscar po nome">
+    <button type="submit">Buscar</button>
+    {#so mostra o link "Limpar" se existir uma busca ativa#}
+    {# if buscar #} <a href="{{ url_for('inicio')}}">limpar</a{ %endif% }>
+</form>
+
+{# Se a lista de alunos nao estiver vazia, mostrar a tabela:senao,uma mensagem#}
+
+{% if alunos %}
+<div = "rolagem">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Nota 1</th>
+                <th>Nota 2</th>
+                <th>Média</th>
+                <th>Situação</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {# O for repete este "tr" uma vaz para cada aluno da lista#}
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{ aluno.id }}</td>
+                <td>{{ aluno.id }}</td>
+                <td>{{ "%1f" | format(aluno.nota1)}}</td>
+                <td>{{ "%1f" | format(aluno.nota2)}}</td>
+                <td>{{ "%1f" | format(aluno.media)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

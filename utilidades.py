@@ -1,43 +1,40 @@
 def ler_texto(mensagem):
-    '''Pede um texto e repete ate o usuario digitar algo(nao vazio).'''
+    '''Pede um texto e repete até o usuário digitar algo (não vazio).'''
     while True:
-        texto = input(mensagem).strip()
-        if texto != "":
+        texto = input(mensagem).strip() 
+        if texto != '':
             return texto
-        print("Este campo nao pode fficar vazio.")
+        print("Este campo não pode ficar vazio.")
 
 def ler_inteiro(mensagem):
-    '''Pede um numero intero ate o usuario digitar algo certo'''
+    '''Pede um número inteiro até o usuário digitar certo'''
     while True:
         try:
             return int(input(mensagem))
         except ValueError:
-            print( "Digite um numero intero.")
+            print('Digite um número inteiro.')
 
 def ler_nota(mensagem):
-    '''Pede uma nota de 1 a 10. Aceita virgula ou ponto.'''
+    '''Pede uma nota entre 0 e 10. Aceita vírgula ou ponto.'''
     while True:
         try:
-            nota = float(input(mensagem).replace(',','.'))
+         nota = float(input(mensagem).replace(',', '.'))
         except ValueError:
-            print('digite um numero por exemplo 7.5')
-            continue
+         print('Digite um número, por exemplo, 7.5')
+         continue
         if 0 <= nota <= 10:
-            return nota
+           return nota
         print('A nota deve estar entre 0 e 10.')
 
-def calcular_media(nota1,nota2):
-    '''Devolver a media simples de duas notas'''
-    return (nota1 + nota2) / 2
+def calcular_media(nota1, nota2):
+   '''Devolve a média simples de duas notas'''
+   return (nota1 + nota2) / 2
 
 def situacao(media):
-    '''Devolver a situacao do aluno de acordo com a media'''
-    if media >= 7:
-        return("aprovado")
-    elif media >= 5 and media < 7:
-        return("recuperacao")
-    else:
-        return('REPROVADO!!!')
-    
-
-
+   '''Devolve a situação do aluno de acordo com a média'''
+   if media >= 7:
+      return "Aprovado"
+   elif media >= 5 and media < 7:
+      return "Recuperação"
+   else:
+      return "Reprovado"

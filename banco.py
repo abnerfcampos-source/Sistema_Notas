@@ -3,34 +3,35 @@ import sqlite3
 import sys
 
 def pasta_do_programa():
-    '''Descobre a pasta onde o programa esta'''
-    if getattr(sys, "frozen", False):
+    '''Descobre a pasta onde o programa está'''
+    if getattr(sys, 'frozen', False):
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
 
-CAMINHO_BANCO = os.path.join(pasta_do_programa(),"alunos.db")
+CAMINHO_BANCO = os.path.join(pasta_do_programa(), 'alunos.db')
 
 def conectar():
     return sqlite3.connect(CAMINHO_BANCO)
+
 def criar_tabela():
-    '''Criar tabela de alunos se ela ainda nao existir'''
+    '''Cria a tabela de alunos se ela ainda não existir'''
     conn = conectar()
     conn.execute('''
-        CREATE TABLE IF NOT EXIST alunos(
-        id INTEGRANTE PRIMARY KEY AUTO INCREMENT,
-        nome TEXT NOT NULL, 
-        nota1 REAL NOT NULL,
-        nota2 REAL NOT NULL)
+        CREATE TABLE IF NOT EXISTS alunos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            nota1 REAL NOT NULL,
+            nota2 REAL NOT NULL
         )
-''')
+    ''')
     conn.commit()
     conn.close()
 
-def inserir_aluno():
-    '''Devolve uma  lista tuplas: (id, nome, nota1 e nota2)'''
+def inserir_aluno(nome, nota1, nota2):
+    '''Devolve uma lista de tuplas: (id, nome, nota1, nota2)'''
     conn = conectar()
     conn.execute(
-        'INSERIR INTO alunos (nome, nota1 e nota2) VALUES (?,?,?)'
+        'INSERT INTO alunos (nome, nota1, nota2) VALUES (?, ?, ?)', (nome, nota1, nota2)
     )
     conn.commit()
     conn.close()
@@ -38,34 +39,34 @@ def inserir_aluno():
 def listar_alunos():
     conn = conectar()
     linhas = conn.execute(
-        "SELECT id, nome, nota1 e nota2 FROM alunos ORDER BY nome"
+        'SELECT id, nome, nota1, nota2 FROM alunos ORDER BY nome'
     ).fetchall()
     conn.close()
     return linhas
 
 def buscar_por_nome(texto):
-    '''Buscar aluno cujo nome contem o texto (ignora minusculas)'''
+    '''Buscar aluno cujo nome contém o texto (ignora maiúsculas)'''
     conn = conectar()
     linhas = conn.execute(
-        "SELECT id, nome, nota1 e nota2 FROM alunos WHERE nome LIKE ? ORDER  BY nome",
-        (f"%{texto}%",),
+        'SELECT id, nome, nota1, nota2 FROM alunos WHERE nome LIKE ? ORDER BY nome',
+        (f'%{texto}%',),   
     ).fetchall()
     conn.close()
-    return linhas 
+    return linhas
 
 def buscar_por_id(id_aluno):
-    '''Devolver o qalunos com esse id ou None se nao existir'''
+    '''Devolve o aluno com esse id ou None se não existir'''
     conn = conectar()
     aluno = conn.execute(
-        "SELECT id, nome, nota1 e nota2 FROM alunos WHERE id = ?", (id_aluno)
-    ).fetchall()
+        'SELECT id, nome, nota1, nota2 FROM alunos WHERE id = ?', (id_aluno,)
+    ).fetchone()
     conn.close()
     return aluno
 
 def atualizar_notas(id_aluno, nota1, nota2):
     conn = conectar()
     conn.execute(
-        "UPDATE alunos SET nota1 = ?, nota2 = ? WHERE id = ?"
+        'UPDATE alunos SET nota1 = ?, nota2 = ? WHERE id = ?', (nota1, nota2, id_aluno)
     )
     conn.commit()
     conn.close()
@@ -73,8 +74,7 @@ def atualizar_notas(id_aluno, nota1, nota2):
 def remover_aluno(id_aluno):
     conn = conectar()
     conn.execute(
-        "DELETE FROM alunos WHERE id = ?", (id_aluno,)
-
+        'DELETE FROM alunos WHERE id = ?', (id_aluno,)
     )
     conn.commit()
     conn.close()
