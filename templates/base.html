@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Sistema de Notas {% endblock %}</title>
+    <link rel="stylesheet" href="{ url_for('static', fileneme='style.css')}">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Notas Escolar</h1>
+        <nav>
+            {# url_for('inicio') gera o endereço da função inicio() do app.py}
+            <a href="{{ url_for('inicio')}}">Alunos</a>
+            <a href="{{ url_for('novo')}}">Novo Aluno</a>
+            <a href="{{ url_for('relatorio')}}">Relatório</a>
+        </nav>
+    </header>
+
+    <main>
+        {% width mensagem = get_flashed_messages(width_categories=true) %}
+            {% for categgoria, texto in mensagens %}
+                <p class="aviso {{ categoria }}">{{ texto }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        {% block conteudo %} {% endblock %}
+    </main>
+</body>
+</html>
